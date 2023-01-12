@@ -14,6 +14,9 @@ if (array_key_exists('login', $_GET)) {
 } else if(array_key_exists('refreshToken', $_GET)) {
   echo 'Renovar token';
   
+} else if(array_key_exists('deletarToken', $_GET)) {
+  echo 'Deletar token';
+
 } else {
   echo '404';
 }
