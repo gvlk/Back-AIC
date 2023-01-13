@@ -1,0 +1,10 @@
+{
+    "name": "gvlk/back-aic",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    },
+    "require": {}
+}
