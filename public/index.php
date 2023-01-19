@@ -3,6 +3,7 @@
 require '../vendor/autoload.php';
 
 use App\Modules\Response;
+use App\Controllers\RefreshTokenController;
 use App\Controllers\LoginController;
 use App\Controllers\RegisterController;
 
@@ -34,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $response = match ($firstUrl) {
         'login' => LoginController::post($conn, $_POST),
         'cadastro' => RegisterController::post($conn, $_POST),
-        // 'refresh-token' => LoginController::refreshToken($_POST),
+        'refresh-token' => RefreshTokenController::post($conn, $_POST),
         // 'delete-token' => LoginController::deleteToken($_POST),
         default => die(404)
     };
