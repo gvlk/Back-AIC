@@ -3,8 +3,8 @@
 require '../vendor/autoload.php';
 
 use App\Modules\Response;
-use App\Controller\LoginController;
-use App\Controller\RegisterController;
+use App\Controllers\LoginController;
+use App\Controllers\RegisterController;
 
 //== Response construct ==//
 function constructResponse(Response $response)
