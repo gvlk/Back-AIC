@@ -15,9 +15,9 @@ class LoginController
         }
 
         try {
-            $sql = 'SELECT * FROM user WHERE cpf=? AND senha=?';
+            $sql = 'SELECT * FROM user WHERE cpf=?';
             $stmt = $conn->prepare($sql, [PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY]);
-            $stmt->execute([$requestBody['cpf'], $requestBody['senha']]);
+            $stmt->execute([$requestBody['cpf']]);
             $response = $stmt->fetchAll();
         } catch (PDOException) {
             return Response::error('Erro interno');
@@ -36,6 +36,11 @@ class LoginController
         $responseSenha = $response[0]['senha'];
         $responseUserId = $response[0]['id'];
 
+        // Verificar se a senha esta correta
+        if(! password_verify($requestBody['senha'], $responseSenha)) {
+            return Response::error('Credenciais invalidas');
+        }
+
         // Gerar tokens
         $accessToken = base64_encode(bin2hex(random_bytes(24)).time());
         $refreshToken = base64_encode(bin2hex(random_bytes(24)).time());
@@ -46,8 +51,8 @@ class LoginController
             $sql = 'INSERT INTO sessions (accessToken, refreshToken, dueAccessToken, dueRefreshToken, user_id) VALUES (?, ?, ?, ?, ?)';
             $stmt = $conn->prepare($sql, [PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY]);
             $stmt->execute([$accessToken, $refreshToken, $dueAccessToken,$dueRefreshToken, $responseUserId]);
-        } catch (PDOException) {
-            return Response::error('Erro interno');
+        } catch (PDOException $e) {
+            return Response::error('Erro interno: ' . $e->getMessage());
         }
 
         return Response::success([
