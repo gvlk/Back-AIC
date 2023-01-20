@@ -19,7 +19,7 @@ function constructResponse(Response $response)
 $host = "localhost";
 $dbname = "gerenciamento_riscos";
 $username = "root";
-$password = "";
+$password = "123456789";
 
 try {
     $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
@@ -29,7 +29,7 @@ try {
 }
 
 //== Start router ==//
-$firstUrl = explode($_SERVER['REQUEST_URI'], '/')[0];
+$firstUrl = substr($_SERVER['REQUEST_URI'], 1);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $response = match ($firstUrl) {
@@ -37,14 +37,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'cadastro' => RegisterController::post($conn, $_POST),
         'refresh-token' => RefreshTokenController::post($conn, $_POST),
         // 'delete-token' => LoginController::deleteToken($_POST),
-        default => die(404)
+        default => Response::error('rota invalida')
     };
 } elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $response = match ($firstUrl) {
-        default => die(404)
+        default => Response::error('rota invalida')
     };
 } else {
-    die(404);
+    $response = Response::error('rota invalida');
 }
 
 //== Return response ==//

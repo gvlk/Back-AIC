@@ -51,7 +51,7 @@ class RegisterController
             $returnData['usuario_id'] = $lastUserId;
             $returnData['cpf'] = $cpf;
 
-            return Response::error('Usuário criado com sucesso');
+            return Response::success(['message' => 'Usuário criado com sucesso']);
         } catch (PDOException $ex) {
             return Response::error('Erro interno:' . $ex->getMessage());
         }
